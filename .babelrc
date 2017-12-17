@@ -5,6 +5,8 @@
         [ "stage-0" ],
         [ "env", { "targets" : { "node" : "current" } } ]
     
-    ]
+    ],
+    
+    "plugins": [ "transform-promise-to-bluebird" ],
     
 }
