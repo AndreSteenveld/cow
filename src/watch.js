@@ -15,13 +15,16 @@ export class Watcher extends EventEmitter {
         process.once( "exit", ( ) => watcher.kill( ) );
         
         watcher.once( "error", ( error ) => {
+
             log.error( error );
             process.exit( 1 );
+
         });
         
         watcher.stdout.on( "data", ( data ) => {
-            log.debug( data );
+
             this.emit( "synchronize" );
+
         });
         
     }

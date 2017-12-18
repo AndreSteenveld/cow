@@ -26,9 +26,22 @@ export class Synchronizer {
             .debounce( ( ) => Promise.delay( 750 ) )
             .subscribe( ( ) => {
                 
-                log.debug( "file changes" );
+                const 
+                    link_destinations = sources.map( ( source ) => `--link-dest="${ source }"` ).join( " " ),
+                    rsync_sources     = sources.join( " " ),
+                    rsync_command     = `rsync --itemize-changes --delete --recursive --hard-links ${ link_destinations } ${ rsync_sources } ${ destination }`;
+            
+                log.debug( rsync_command );
+                
+                const rsync = exec( rsync_command );
+                
+                for( const line of rsync.toString( "utf8" ).split( "\n" ) )
+                    log.info( line );
                 
             });
+            
+    
+        log.info( "Synchronizer has been setup" );
             
     }
     
