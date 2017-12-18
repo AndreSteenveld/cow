@@ -9,8 +9,8 @@ const log = log4js.getLogger( "index" );
 export function overlay( options, destination, sources ){
     
     const 
-        watcher      = watch( options, sources ),
-        synchronizer = synchronize( options, destination, sources );
+        synchronizer = synchronize( options, destination, sources ),
+        watcher      = watch( options, sources );
     
     watcher
         .on( "synchronize", synchronizer :: synchronizer.synchronize )

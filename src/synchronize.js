@@ -1,3 +1,5 @@
+import { execSync as exec } from "child_process";
+
 import { Subject } from "rxjs/rx";
 import log4js from "log4js";
 
@@ -9,11 +11,16 @@ export class Synchronizer {
     subject = new Subject( );
     
     constructor( options, destination, sources ){
+        
+        const cp = exec( `cp -lR --verbose --preserve=all -t ${ destination } ${ sources.join( " " ) }` )
                 
+        for( const line of cp.toString( "utf8" ).split( "\n" ) )
+            log.info( line );
+            
         this.subject
             .catch( ( error ) => {
                 
-                log.debug( error );
+                log.error( error );
                 
             })
             .debounce( ( ) => Promise.delay( 750 ) )
@@ -26,7 +33,7 @@ export class Synchronizer {
     }
     
     synchronize( ){
-        debugger;
+    
         this.subject.next( );
         
     }
