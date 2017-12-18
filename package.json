@@ -2,24 +2,29 @@
   "name": "cow",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "bin": "index.js",
+  "main": "src/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "setup": "touch .development",
+    "build": "babel --out-dir src src ./environment.js && mv ./src/environment.js ./environment.js",
+    "postinstall": "postinstall-build .development || :",
+    "start": "./cow"
   },
   "author": "Andre Steenveld",
   "license": "LGPL-3.0",
   "dependencies": {
-    "babel-plugin-transform-promise-to-bluebird": "^1.1.1",
     "bluebird": "^3.5.1",
     "eventemitter3": "^3.0.0",
     "log4js": "^2.4.1",
-    "pify": "^3.0.0",
+    "postinstall-build": "^5.0.1",
     "rxjs": "^5.5.5",
     "shelljs": "^0.7.8",
     "yargs": "^10.0.3"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-plugin-transform-promise-to-bluebird": "^1.1.1",
     "babel-preset-env": "^1.6.1",
     "babel-preset-stage-0": "^6.24.1",
     "chai": "^4.1.2",
