@@ -7,6 +7,9 @@
     
     ],
     
-    "plugins": [ "transform-promise-to-bluebird" ],
+    "plugins": [ 
+        "transform-promise-to-bluebird",
+        "transform-class-properties"
+    ],
     
 }
