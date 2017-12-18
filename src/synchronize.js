@@ -1,4 +1,8 @@
 import { Subject } from "rxjs/rx";
+import log4js from "log4js";
+
+const log = log4js.getLogger( "synchronizer" );
+
 
 export class Synchronizer {
     
@@ -7,17 +11,22 @@ export class Synchronizer {
     constructor( options, destination, sources ){
                 
         this.subject
+            .catch( ( error ) => {
+                
+                log.debug( error );
+                
+            })
             .debounce( ( ) => Promise.delay( 750 ) )
             .subscribe( ( ) => {
                 
-                console.log( "File change" );
+                log.debug( "file changes" );
                 
             });
             
     }
     
     synchronize( ){
-        
+        debugger;
         this.subject.next( );
         
     }

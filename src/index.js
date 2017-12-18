@@ -1,7 +1,10 @@
 import shell from "shelljs";
+import log4js from "log4js";
 
 import watch from "./watch";
 import synchronize from "./synchronize";
+
+const log = log4js.getLogger( "index" );
 
 export function overlay( options, destination, sources ){
     
@@ -10,8 +13,8 @@ export function overlay( options, destination, sources ){
         synchronizer = synchronize( options, destination, sources );
     
     watcher
-        .on( "synchronize", synchronize.synchronize )
-        .on( "error", synchronize.error );
+        .on( "synchronize", synchronizer :: synchronizer.synchronize )
+        .on( "error", synchronizer :: synchronizer.error );
     
     return { watcher, synchronizer };
     
@@ -20,9 +23,18 @@ export function overlay( options, destination, sources ){
 export function cli( program, $arguments ){
     
     const { argv } = program
-        .usage( "$0 <destination> <sources...>", "", ( yargs ) =>
+        .usage( "$0 [options] <destination> <sources...>", "", ( yargs ) => {
         
             yargs
+                .options({
+                    
+                    "v": {
+                        alias: "verbose",
+                        type: "count",    
+                                            
+                    }
+                    
+                })
                 .positional( "destination", {
         
                     type: "string",
@@ -36,9 +48,11 @@ export function cli( program, $arguments ){
                     demandOption : true,
         
                 })
-        
-        )
+            
+        })
         .help( );
+    
+    log.debug( argv );
     
     return Promise
         .resolve( argv )
@@ -49,13 +63,13 @@ export function cli( program, $arguments ){
     
             const { destination, sources } = command_arguments;
             
-            return overlay( null, destination, sources ).toPromise( );
+            return overlay( null, destination, sources );
     
         })
         .catch(
             
             ( error ) => {
-                console.error( error );
+                log.error( error );
                 process.exit( 1 );
             }
     

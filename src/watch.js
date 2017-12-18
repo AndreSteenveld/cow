@@ -1,19 +1,28 @@
 import child_process from "child_process";
 import EventEmitter from "eventemitter3";
+import log4js from "log4js";
+
+const log = log4js.getLogger( "watch" ); 
 
 export class Watcher extends EventEmitter {
     
     constructor( options, sources ){
-        
+
         super( );
         
-        const watcher = child_process.spawn( "fswatch", [ "--directories", "--event-flags", "--one-per-batch", "--event=IsFile", ...sources ] )
+        const watcher = child_process.spawn( "fswatch", [ "--directories", "--event-flags", "--one-per-batch", "--event=IsFile", ...sources ] );
         
         process.once( "exit", ( ) => watcher.kill( ) );
         
-        watcher.once( "error", ( ) => process.exit( 1 ) );
+        watcher.once( "error", ( error ) => {
+            log.error( error );
+            process.exit( 1 );
+        });
         
-        watcher.on( "data", ( data ) => this.emit( "synchronize" ) );
+        watcher.stdout.on( "data", ( data ) => {
+            log.debug( data );
+            this.emit( "synchronize" );
+        });
         
     }
     
