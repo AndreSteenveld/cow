@@ -29,7 +29,7 @@ export class Synchronizer {
                 const 
                     link_destinations = sources.map( ( source ) => `--link-dest="${ source }"` ).join( " " ),
                     rsync_sources     = sources.join( " " ),
-                    rsync_command     = `rsync --itemize-changes --delete --recursive --hard-links ${ link_destinations } ${ rsync_sources } ${ destination }`;
+                    rsync_command     = `rsync --copy-links --keep-dirlinks --itemize-changes --delete --recursive --hard-links ${ link_destinations } ${ rsync_sources } ${ destination }`;
             
                 log.debug( rsync_command );
                 
