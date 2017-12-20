@@ -12,8 +12,8 @@ export class Synchronizer {
     
     constructor( options, destination, sources ){
         
-        const cp = exec( `cp -lR --verbose --preserve=all -t ${ destination } ${ sources.join( " " ) }` )
-                
+        const cp = exec( `cp -ldR --verbose -t ${destination} ${sources.join(" ")}` );
+        
         for( const line of cp.toString( "utf8" ).split( "\n" ) )
             log.info( line );
             
